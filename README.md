@@ -4,7 +4,9 @@
 
 * Golang
     * v1.13
-* boot lnd with watchtower server on testnet
+* Bitcoin network
+    * testnet3
+* boot lnd with watchtower server on localhost
     * v0.9.1
     * watchtower setup reference: https://github.com/lightningnetwork/lnd/blob/master/docs/watchtower.md
 
@@ -15,6 +17,7 @@ $ git clone https://github.com/takaya-imai/sample_code_for_watchtower_protocol_o
 $ cd $GOPATH/src/github.com/takaya-imai/sample_code_for_watchtower_protocol_of_lnd
 $ go get -u github.com/golang/dep/cmd/dep
 $ dep ensure
+$ vi sample_code.go # change pubkey of watchtower server according to https://github.com/lightningnetwork/lnd/issues/4037
 $ go run sample_code.go
 ```
 
