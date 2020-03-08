@@ -94,7 +94,6 @@ func (c *Client) SendCreateSessionMsg(serverAddr *lnwire.NetAddress, createSessi
 	c.sendMessage(serverAddr, createSessionMsg)
 
 	// read CreateSession message
-	//var replyMsg wtwire.Message
 	replyMsg := c.readMessage()
 	createSessionReply, ok := replyMsg.(*wtwire.CreateSessionReply)
 	if !ok {
@@ -118,7 +117,6 @@ func (c *Client) SendStateUpdateMsg(serverAddr *lnwire.NetAddress, stateUpdate *
 	c.sendMessage(serverAddr, stateUpdate)
 
 	// read message
-	//var replyMsg wtwire.Message
 	replyMsg := c.readMessage()
 	stateUpdateReplyMsg := replyMsg.(*wtwire.StateUpdateReply)
 	log.Printf("MsgType: %v", replyMsg.MsgType())
@@ -136,8 +134,7 @@ func (c *Client) SendDeleteSessionMsg(serverAddr *lnwire.NetAddress, deleteSessi
         c.sendMessage(serverAddr, deleteSessionMsg)
 
         // read CreateSession message
-        var replyMsg wtwire.Message
-        replyMsg = c.readMessage()
+        replyMsg := c.readMessage()
         log.Printf("MsgType: %v", replyMsg.MsgType())
         deleteSessionReply, ok := replyMsg.(*wtwire.DeleteSessionReply)
         log.Printf("Code: %v", deleteSessionReply.Code)
