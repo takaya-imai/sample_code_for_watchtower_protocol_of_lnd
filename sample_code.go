@@ -184,7 +184,12 @@ func TestMsgsStateUpdate() [](*wtwire.StateUpdate) {
                 log.Printf("Unable to create breachTxID: %v", err)
                 return nil
         }
+
+	// hint: breach tx locator which is sha256 hash of breach txid
+	// key: encryption key for justice tx which is sha256 hash of breach txid || breach txid
         hint, key := blob.NewBreachHintAndKeyFromHash(breachTxID)
+
+	// encBlob: enctrypted justice tx by ChaCha20-Poly1305
         encBlob, err := jk.Encrypt(key, blob.TypeAltruistCommit)
         if err != nil {
                 log.Printf("Unable to create encBlob: %v", err)
