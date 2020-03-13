@@ -186,7 +186,7 @@ func TestMsgsStateUpdate() [](*wtwire.StateUpdate) {
         }
 
 	// hint: breach tx locator which is sha256 hash of breach txid
-	// key: encryption key for justice tx which is sha256 hash of breach txid || breach txid
+	// key: encryption key for justice tx which is sha256 hash of (breach txid || breach txid)
         hint, key := blob.NewBreachHintAndKeyFromHash(breachTxID)
 
 	// encBlob: enctrypted justice tx by ChaCha20-Poly1305
