@@ -21,38 +21,38 @@ import (
 
 
 type Client struct {
-	Priv *btcec.PrivateKey
-	Conn *brontide.Conn
+	priv *btcec.PrivateKey
+	conn *brontide.Conn
 }
 
 
 // connect to watchtower server
 func (c *Client) connect(toAddr *lnwire.NetAddress) {
-	if c.Conn != nil {
+	if c.conn != nil {
 		return
 	}
 
 	// dial(connection establishing) defined in brontide through the connection instance
-	conn, err := brontide.Dial(c.Priv, toAddr, net.Dial)
+	conn, err := brontide.Dial(c.priv, toAddr, net.Dial)
 	if err != nil {
 		log.Printf("Unable to connect: %v", err)
 		return
 	}
-	c.Conn = conn
+	c.conn = conn
 }
 
 // send Message to watchtower server
 func (c *Client) sendMessage(toAddr *lnwire.NetAddress, msg wtwire.Message) {
-	if c.Conn == nil { c.connect(toAddr) }
+	if c.conn == nil { c.connect(toAddr) }
 
 	var b bytes.Buffer
 	wtwire.WriteMessage(&b, msg, 0)
-	c.Conn.Write(b.Bytes())
+	c.conn.Write(b.Bytes())
 }
 
 // read Message from watchtower server
 func (c *Client) readMessage() wtwire.Message {
-	rawMsg, err := c.Conn.ReadNextMessage()
+	rawMsg, err := c.conn.ReadNextMessage()
 	if err != nil {
 		log.Printf("Unable to read raw message: %v", err)
 		return nil
@@ -106,8 +106,8 @@ func (c *Client) SendCreateSessionMsg(serverAddr *lnwire.NetAddress, createSessi
 	log.Printf("Code: %v", createSessionReply.Code)
 	log.Printf("Data(sweepPkScript): %v", createSessionReply.Data)
 
-	c.Conn.Close()
-	c.Conn = nil
+	c.conn.Close()
+	c.conn = nil
 }
 
 func (c *Client) SendStateUpdateMsg(serverAddr *lnwire.NetAddress, stateUpdate *wtwire.StateUpdate) {
@@ -123,8 +123,8 @@ func (c *Client) SendStateUpdateMsg(serverAddr *lnwire.NetAddress, stateUpdate *
 	log.Printf("Code: %v", stateUpdateReplyMsg.Code)
 	log.Printf("LastApplied: %v", stateUpdateReplyMsg.LastApplied)
 
-	c.Conn.Close()
-	c.Conn = nil
+	c.conn.Close()
+	c.conn = nil
 }
 
 func (c *Client) SendDeleteSessionMsg(serverAddr *lnwire.NetAddress, deleteSessionMsg *wtwire.DeleteSession) {
@@ -143,8 +143,8 @@ func (c *Client) SendDeleteSessionMsg(serverAddr *lnwire.NetAddress, deleteSessi
                 return
         }
 
-        c.Conn.Close()
-        c.Conn = nil
+        c.conn.Close()
+        c.conn = nil
 }
 
 
@@ -214,7 +214,7 @@ func main() {
 	// define local
 	clientPriv, _ := btcec.NewPrivateKey(btcec.S256())
 	client := Client{
-		Priv: clientPriv,
+		priv: clientPriv,
 	}
 
 	// define server
